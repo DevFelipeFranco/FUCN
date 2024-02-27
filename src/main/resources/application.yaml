@@ -1,0 +1,34 @@
+spring:
+  jackson:
+    time-zone: America/Bogota
+  datasource:
+    url: jdbc:mysql://localhost:3306/TEST_FUCN
+    username: felipe
+    password: felipe
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # Optional configuracion
+    hikari:
+      pool-name: my-pool
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    database: mysql
+    generate-ddl: true
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+jwt:
+  secret: my-secret-super-secret-min-length-256-test
