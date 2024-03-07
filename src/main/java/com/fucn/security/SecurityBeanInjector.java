@@ -3,6 +3,7 @@ package com.fucn.security;
 import com.fucn.domain.User;
 import com.fucn.domain.UserPrincipal;
 import com.fucn.repository.UserRepository;
+import com.fucn.utils.config.WebConfigProperties;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Date;
 
@@ -26,6 +29,7 @@ import java.util.Date;
 public class SecurityBeanInjector {
 
     private final UserRepository userRepository;
+    private final WebConfigProperties webConfigProperties;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -58,6 +62,22 @@ public class SecurityBeanInjector {
             userRepository.save(user);
             log.info("Returning found user by username: " + username);
             return new UserPrincipal(user);
+        };
+    }
+
+    @Bean
+    public WebMvcConfigurer corsMappingConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                WebConfigProperties.Cors cors = webConfigProperties.getCors();
+                registry.addMapping("/**")
+                        .allowedOrigins(cors.getAllowedOrigins())
+                        .allowedMethods(cors.getAllowedMethods())
+                        .maxAge(cors.getMaxAge())
+                        .allowedHeaders(cors.getAllowedHeaders())
+                        .exposedHeaders(cors.getExposedHeaders());
+            }
         };
     }
 }

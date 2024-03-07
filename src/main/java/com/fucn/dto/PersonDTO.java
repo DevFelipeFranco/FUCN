@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Builder
 public record PersonDTO(
+        Long idPerson,
         String firstName,
         String lastName,
         Date dateBirth,

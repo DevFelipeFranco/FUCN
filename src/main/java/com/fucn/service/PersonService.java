@@ -6,4 +6,6 @@ import com.fucn.dto.PersonDTO;
 public interface PersonService {
 
     Person createPerson(PersonDTO personDTO);
+
+    Person findPersonByUser(Long idUser);
 }

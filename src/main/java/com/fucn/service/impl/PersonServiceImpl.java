@@ -1,12 +1,14 @@
 package com.fucn.service.impl;
 
 import com.fucn.domain.Person;
+import com.fucn.domain.User;
 import com.fucn.domain.UserPrincipal;
 import com.fucn.dto.PersonDTO;
 import com.fucn.exception.ApiException;
 import com.fucn.repository.PersonRepository;
 import com.fucn.repository.UserRepository;
 import com.fucn.service.PersonService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
@@ -51,5 +54,12 @@ public class PersonServiceImpl implements PersonService {
 
         Person save = personRepository.save(person1);
         return save;
+    }
+
+    @Override
+    public Person findPersonByUser(Long idUser) {
+        User user = User.builder().idUser(idUser).build();
+        Optional<Person> personByUser = personRepository.findPersonByUser(user);
+        return personByUser.orElse(null);
     }
 }

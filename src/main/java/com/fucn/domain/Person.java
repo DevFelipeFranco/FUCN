@@ -1,5 +1,6 @@
 package com.fucn.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +19,7 @@ import java.util.Date;
 @Table(name = "PERSONS", schema = "TEST_FUCN")
 @DynamicUpdate
 @DynamicInsert
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Person implements Serializable {
 
     @Id
@@ -29,8 +32,18 @@ public class Person implements Serializable {
     private String residence;
     private String position;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_USER")
     private User user;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "DEVICE_LOANS",
+            joinColumns = @JoinColumn(name = "ID_PERSON"),
+            inverseJoinColumns = @JoinColumn(name = "ID_DEVICE"))
+    private List<Device> devices;
+
+
+    @OneToMany(mappedBy = "person")
+    private List<Loan> loans;
 
 }

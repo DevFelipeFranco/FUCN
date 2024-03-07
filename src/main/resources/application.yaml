@@ -32,3 +32,11 @@ logging:
 
 jwt:
   secret: my-secret-super-secret-min-length-256-test
+
+web:
+  cors:
+    allowed-origins: "http://localhost:4200"
+    allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+    max-age: 3600
+    allowed-headers: "*"
+    exposed-headers: "Jwt-Token"

@@ -13,7 +13,7 @@ import java.net.URI;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 
 @RestController
@@ -39,6 +39,29 @@ public class PersonController {
                         .status(CREATED)
                         .statusCode(CREATED.value())
                         .build());
+    }
+
+    @GetMapping(value = "/{idUser}")
+    public ResponseEntity<HttpResponse> findPersonByUser(@PathVariable("idUser") Long idUser) {
+        Person person = personService.findPersonByUser(idUser);
+        if (person != null) {
+            return ResponseEntity.ok().body(
+                    HttpResponse.builder()
+                            .timeStamp(now().toString())
+                            .data(of("person", person))
+                            .message(String.format("Person created for person %s", person.getFirstName()))
+                            .status(OK)
+                            .statusCode(OK.value())
+                            .build());
+        } else {
+            return ResponseEntity.status(NOT_FOUND).body(
+                    HttpResponse.builder()
+                            .timeStamp(now().toString())
+                            .message("La persona no existe, puede continuar con la creacion de la persona")
+                            .status(OK)
+                            .statusCode(OK.value())
+                            .build());
+        }
     }
 
     private URI getUri() {
