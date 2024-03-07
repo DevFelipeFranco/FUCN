@@ -36,12 +36,6 @@ public class Person implements Serializable {
     @JoinColumn(name = "ID_USER")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "DEVICE_LOANS",
-            joinColumns = @JoinColumn(name = "ID_PERSON"),
-            inverseJoinColumns = @JoinColumn(name = "ID_DEVICE"))
-    private List<Device> devices;
-
 
     @OneToMany(mappedBy = "person")
     private List<Loan> loans;

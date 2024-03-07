@@ -35,30 +35,33 @@ public class LoanServiceImpl implements LoanService {
         RequestType requestType = RequestType.builder().idRequestType(loanDTO.idRequestType()).build();
         Device device = Device.builder().idDevice(loanDTO.idDevice()).build();
 
-        Person person = addDeviceToPersonById(loanDTO.idPerson(), device);
+//        Person person = addDeviceToPersonById(loanDTO.idPerson(), device);
+        Person person = personRepository
+                .findAllById(Collections.singletonList(loanDTO.idPerson()))
+                .stream().findFirst()
+                .orElseThrow(() -> new ApiException("No existe la persona con el id: " + loanDTO.idPerson()));
+
+        // TODO: HAcer validacion si el dispositivo ya esta asignado a la persona que esta haciendo el prestamo
+
         Loan build = Loan.builder()
                 .description(loanDTO.description())
                 .address(loanDTO.address())
                 .requestType(requestType)
                 .person(person)
+                .device(device)
                 .build();
 
         return loanRepository.save(build);
     }
 
-    private Person addDeviceToPersonById(Long idPerson, Device device) {
-        return personRepository.findAllById(Collections.singleton(idPerson)).stream().findFirst()
-                .map(person -> buildPerson(person, device)).orElseThrow(() -> new ApiException("No existe la persona con el id: " + idPerson));
-
-    }
-
-    private Person buildPerson(Person person, Device device) {
-        person.getDevices().add(device);
-
-
-//        List<Device> devices = person.getDevices();
-//        devices.add(device);
-//        person.setDevices(devices);
-        return person;
-    }
+//    private Person addDeviceToPersonById(Long idPerson, Device device) {
+//        return personRepository.findAllById(Collections.singleton(idPerson)).stream().findFirst()
+//                .map(person -> buildPerson(person, device)).orElseThrow(() -> new ApiException("No existe la persona con el id: " + idPerson));
+//
+//    }
+//
+//    private Person buildPerson(Person person, Device device) {
+//        person.getDevices().add(device);
+//        return person;
+//    }
 }

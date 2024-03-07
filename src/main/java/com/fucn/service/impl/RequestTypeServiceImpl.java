@@ -1,6 +1,7 @@
 package com.fucn.service.impl;
 
 import com.fucn.domain.RequestType;
+import com.fucn.dto.RequestTypeDTO;
 import com.fucn.repository.RequestTypeRepository;
 import com.fucn.service.RequestTypeService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,14 @@ public class RequestTypeServiceImpl implements RequestTypeService {
     @Override
     public List<RequestType> findAll() {
         return requestTypeRepository.findAll();
+    }
+
+    @Override
+    public RequestType createRequestType(RequestTypeDTO requestTypeDTO) {
+        RequestType build = RequestType.builder()
+                .name(requestTypeDTO.name())
+                .description(requestTypeDTO.description())
+                .build();
+        return requestTypeRepository.save(build);
     }
 }
