@@ -7,6 +7,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +27,7 @@ public class Loan implements Serializable {
     private Long idLoan;
     private String description;
     private String address;
+    private Date loanDate;
 
     @OneToOne
     @JoinColumn(name = "ID_REQUEST_TYPE")
@@ -33,4 +36,8 @@ public class Loan implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ID_PERSON")
     private Person person;
+
+    @OneToOne
+    @JoinColumn(name = "ID_DEVICE")
+    private Device device;
 }
