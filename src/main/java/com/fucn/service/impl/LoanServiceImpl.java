@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,6 +43,14 @@ public class LoanServiceImpl implements LoanService {
                 .orElseThrow(() -> new ApiException("No existe la persona con el id: " + loanDTO.idPerson()));
 
         // TODO: HAcer validacion si el dispositivo ya esta asignado a la persona que esta haciendo el prestamo
+
+        List<Loan> loanByPerson = loanRepository.findLoanByPerson(person);
+        loanByPerson.stream().filter(loan -> loan.getDevice().getIdDevice().equals(loanDTO.idDevice()) && loan.getRequestType().getIdRequestType().equals(loanDTO.idRequestType()));
+        boolean b = loanByPerson.stream().anyMatch(loan -> loan.getDevice().getIdDevice().equals(loanDTO.idDevice()) && loan.getRequestType().getIdRequestType().equals(loanDTO.idRequestType()));
+        if (b) {
+            throw new ApiException("Ya tienes una solicitud en curso para el mismo dispositivo y el tipo de solicitud");
+        }
+        System.out.println(loanByPerson);
 
         Loan build = Loan.builder()
                 .description(loanDTO.description())
