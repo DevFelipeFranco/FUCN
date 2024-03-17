@@ -35,7 +35,7 @@ jwt:
 
 web:
   cors:
-    allowed-origins: "https://fantastic-pony-12847d.netlify.app"
+    allowed-origins: "https://65f74b29cdb2700008166ca9--fantastic-pony-12847d.netlify.app"
     allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
     max-age: 3600
     allowed-headers: "*"
