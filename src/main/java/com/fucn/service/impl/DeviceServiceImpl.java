@@ -1,6 +1,8 @@
 package com.fucn.service.impl;
 
 import com.fucn.domain.Device;
+import com.fucn.domain.RequestType;
+import com.fucn.dto.DeviceDTO;
 import com.fucn.repository.DeviceRepository;
 import com.fucn.service.DeviceService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +21,15 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<Device> findAll() {
         return deviceRepository.findAll();
+    }
+
+    @Override
+    public Device createDevice(DeviceDTO deviceDTO) {
+        Device build = Device.builder()
+                .name(deviceDTO.name())
+                .model(deviceDTO.model())
+                .reference(deviceDTO.reference())
+                .build();
+        return deviceRepository.save(build);
     }
 }
